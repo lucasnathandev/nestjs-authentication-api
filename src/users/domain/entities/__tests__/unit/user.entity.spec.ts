@@ -24,16 +24,32 @@ describe('UserEntity unit tests', () => {
     expect(sut.props.createdAt).toBeDefined()
   })
 
-  it('getter should have correct values ', () => {
+  it('should get correct values ', () => {
     expect(sut.props.name).toEqual(props.name)
     expect(sut.props.email).toEqual(props.email)
     expect(sut.props.password).toEqual(props.password)
     expect(sut.props.createdAt).toBeInstanceOf(Date)
   })
 
-  it('getters should have correct type values', () => {
+  it('should get correct type values', () => {
     expect(typeof sut.props.name).toBe('string')
     expect(typeof sut.props.email).toBe('string')
     expect(typeof sut.props.password).toBe('string')
+  })
+
+  it('should set values to user name and password', () => {
+    sut['name'] = 'Other name'
+    sut['password'] = 'potatochips'
+
+    expect(sut.name).toEqual('Other name')
+    expect(sut.password).toEqual('potatochips')
+  })
+
+  it('should update values to name and password using methods', () => {
+    sut.updateName('lucas')
+    sut.updatePassword('lucaspass')
+
+    expect(sut.name).toEqual('lucas')
+    expect(sut.password).toEqual('lucaspass')
   })
 })
