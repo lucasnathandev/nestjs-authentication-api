@@ -21,9 +21,6 @@ export class UserRules {
   email: string
 
   @MaxLength(100)
-  @IsStrongPassword({
-    minLength: 8,
-  })
   password: string
 
   @IsDate()
