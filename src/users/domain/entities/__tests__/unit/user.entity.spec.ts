@@ -6,11 +6,13 @@ describe('UserEntity unit tests', () => {
   let sut: UserEntity
 
   beforeEach(() => {
+    UserEntity.validate = jest.fn()
     props = UserDataBuilder({})
 
     sut = new UserEntity(props)
   })
   it('should have correct values', () => {
+    expect(UserEntity.validate).toHaveBeenCalled()
     expect(sut.props.name).toBe(props.name)
     expect(sut.props.email).toBe(props.email)
     expect(sut.props.password).toBe(props.password)
@@ -47,8 +49,11 @@ describe('UserEntity unit tests', () => {
 
   it('should update values to name and password using methods', () => {
     sut.updateName('lucas')
+
+    expect(UserEntity.validate).toHaveBeenCalled()
     sut.updatePassword('lucaspass')
 
+    expect(UserEntity.validate).toHaveBeenCalled()
     expect(sut.name).toEqual('lucas')
     expect(sut.password).toEqual('lucaspass')
   })
