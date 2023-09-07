@@ -3,7 +3,6 @@ import {
   MaxLength,
   IsString,
   IsEmail,
-  IsStrongPassword,
   IsDate,
   IsOptional,
 } from 'class-validator'
@@ -18,9 +17,13 @@ export class UserRules {
 
   @MaxLength(255)
   @IsEmail()
+  @IsString()
+  @IsNotEmpty()
   email: string
 
   @MaxLength(100)
+  @IsString()
+  @IsNotEmpty()
   password: string
 
   @IsDate()

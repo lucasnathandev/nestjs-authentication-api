@@ -9,8 +9,17 @@ describe('UserValidator unit tests', () => {
   beforeEach(() => {
     sut = UserValidatorFactory.create()
   })
+
+  it('should validate user correct values WITHOUT errors', () => {
+    const props = UserDataBuilder({})
+    isValid = sut.validate(props)
+
+    expect(isValid).toBeTruthy()
+    expect(sut.errors).toBeNull()
+    expect(sut.validatedData).toStrictEqual(new UserRules(props))
+  })
   describe('Name field', () => {
-    it('Should validate wrong values with errors', () => {
+    it('Should validate wrong name data format with errors', () => {
       isValid = sut.validate(null as any)
       expect(isValid).toBeFalsy()
       expect(sut.errors['name']).toStrictEqual([
@@ -42,14 +51,81 @@ describe('UserValidator unit tests', () => {
         'name must be shorter than or equal to 255 characters',
       ])
     })
+  })
 
-    it('should validate correct values WITHOUT errors', () => {
-      const props = UserDataBuilder({})
-      isValid = sut.validate(props)
+  describe('Email field', () => {
+    it('Should validate wrong email data format with errors', () => {
+      isValid = sut.validate(null as any)
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['email']).toStrictEqual([
+        'email should not be empty',
+        'email must be a string',
+        'email must be an email',
+        'email must be shorter than or equal to 255 characters',
+      ])
 
-      expect(isValid).toBeTruthy()
-      expect(sut.errors).toBeNull()
-      expect(sut.validatedData).toStrictEqual(new UserRules(props))
+      isValid = sut.validate({ ...UserDataBuilder({}), email: '' as any })
+
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['email']).toStrictEqual([
+        'email should not be empty',
+        'email must be an email',
+      ])
+
+      isValid = sut.validate({ ...UserDataBuilder({}), email: 1 as any })
+
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['email']).toStrictEqual([
+        'email must be a string',
+        'email must be an email',
+        'email must be shorter than or equal to 255 characters',
+      ])
+
+      isValid = sut.validate({
+        ...UserDataBuilder({}),
+        email: 'a'.repeat(256),
+      })
+
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['email']).toStrictEqual([
+        'email must be an email',
+        'email must be shorter than or equal to 255 characters',
+      ])
+    })
+  })
+
+  describe('Password field', () => {
+    it('Should validate wrong password data format with errors', () => {
+      isValid = sut.validate(null as any)
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['password']).toStrictEqual([
+        'password should not be empty',
+        'password must be a string',
+        'password must be shorter than or equal to 100 characters',
+      ])
+
+      isValid = sut.validate({ ...UserDataBuilder({}), password: '' as any })
+
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['password']).toStrictEqual(['password should not be empty'])
+
+      isValid = sut.validate({ ...UserDataBuilder({}), password: 1 as any })
+
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['password']).toStrictEqual([
+        'password must be a string',
+        'password must be shorter than or equal to 100 characters',
+      ])
+
+      isValid = sut.validate({
+        ...UserDataBuilder({}),
+        password: 'a'.repeat(101),
+      })
+
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['password']).toStrictEqual([
+        'password must be shorter than or equal to 100 characters',
+      ])
     })
   })
 })
