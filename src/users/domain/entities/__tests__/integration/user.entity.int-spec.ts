@@ -138,5 +138,13 @@ describe('UserEntity integration tests', () => {
         EntityValidationError,
       )
     })
+
+    it('should be a valid user update', () => {
+      expect.assertions(0)
+      const entity = new UserEntity({ ...UserDataBuilder({}) })
+
+      entity.updateName('lucas')
+      entity.updateName('new-password')
+    })
   })
 })
