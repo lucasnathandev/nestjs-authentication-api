@@ -117,4 +117,26 @@ describe('UserEntity integration tests', () => {
       new UserEntity(props)
     })
   })
+
+  describe('Update methods', () => {
+    it('should throw an error when updating an user with invalid name', () => {
+      const entity = new UserEntity({ ...UserDataBuilder({}) })
+
+      expect(() => entity.updateName(null)).toThrowError(EntityValidationError)
+      expect(() => entity.updateName('')).toThrowError(EntityValidationError)
+      expect(() => entity.updateName(15 as any)).toThrowError(EntityValidationError)
+      expect(() => entity.updateName('a'.repeat(256))).toThrowError(EntityValidationError)
+    })
+
+    it('should throw an error when updating an user with invalid name', () => {
+      const entity = new UserEntity({ ...UserDataBuilder({}) })
+
+      expect(() => entity.updatePassword(null)).toThrowError(EntityValidationError)
+      expect(() => entity.updatePassword('')).toThrowError(EntityValidationError)
+      expect(() => entity.updatePassword(15 as any)).toThrowError(EntityValidationError)
+      expect(() => entity.updatePassword('a'.repeat(101))).toThrowError(
+        EntityValidationError,
+      )
+    })
+  })
 })
