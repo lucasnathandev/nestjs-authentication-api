@@ -1,5 +1,5 @@
 import { Entity } from '../entities/entity'
-import { RepositoryInterface } from './respository-contracts'
+import { RepositoryInterface } from './repository-contracts'
 
 export type SortDirection = 'asc' | 'desc'
 
