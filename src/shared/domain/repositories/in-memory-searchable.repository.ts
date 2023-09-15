@@ -11,6 +11,8 @@ export abstract class InMemorySearchableRepository<E extends Entity>
   extends InMemoryRepository<E>
   implements SearchableRepositoryInterface<E, any, any>
 {
+  sortableFields: string[] = []
+
   async search(props: SearchParams): Promise<SearchResult<E>> {
     const itemsFiltered = await this.applyFilter(this.items, props.filter)
     const itemsSorted = await this.applySort(itemsFiltered, props.sort, props.sortDir)
@@ -38,7 +40,12 @@ export abstract class InMemorySearchableRepository<E extends Entity>
     sort: string | null,
     sortDir: string | null,
   ): Promise<E[]> {
-    return
+    if (!sort || !this.sortableFields.includes(sort)) return items
+    return [...items].sort((a, b) => {
+      return sortDir === 'asc'
+        ? a.props[sort] - b.props[sort]
+        : b.props[sort] - a.props[sort]
+    })
   }
 
   protected async applyPaginate(
